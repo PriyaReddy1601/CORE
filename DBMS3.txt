@@ -1,0 +1,303 @@
+REM   Script: DBMS LAB
+REM   NESTED AND CORRELATED NESTED QUERIES
+
+CREATE TABLE EMPLOYEE(    
+                Fname VARCHAR(15),    
+                Mname CHAR,    
+                Lname VARCHAR(10),    
+                Ssn VARCHAR(10),    
+                BDATE VARCHAR(10),    
+                Address VARCHAR(30),    
+                Sex CHAR,    
+                Salary VARCHAR(5),    
+                Super_ssn VARCHAR(10),    
+                Dno INTEGER,    
+                PRIMARY KEY (Ssn),    
+                FOREIGN KEY (Super_ssn) REFERENCES EMPLOYEE(Ssn))  ;
+
+CREATE TABLE DEPARTMENT (   
+                Dname VARCHAR(20),   
+                Dnumber INTEGER,   
+                Mgr_ssn VARCHAR(10),   
+                Mgr_start_date VARCHAR(10),   
+                PRIMARY KEY (Dnumber));
+
+CREATE TABLE DEPT_LOCATIONS(   
+                Dnumber INTEGER,   
+                Dlocation VARCHAR(20),   
+                PRIMARY KEY (Dlocation),   
+                FOREIGN KEY (Dnumber) REFERENCES DEPARTMENT(Dnumber));
+
+CREATE TABLE WORKS_ON(   
+                Essn VARCHAR(10),   
+                Pno INTEGER,   
+                Hours NUMBER(3,1),   
+                FOREIGN KEY (Essn) REFERENCES EMPLOYEE(Ssn));
+
+CREATE TABLE PROJECTS(   
+                Pname VARCHAR (20),   
+                Pnumber INTEGER,   
+                Plocation VARCHAR(10),   
+                Dnum INTEGER,   
+                FOREIGN KEY (Dnum) REFERENCES DEPARTMENT(Dnumber));
+
+CREATE TABLE DEPENDENT(   
+                Essn VARCHAR(10),   
+                Dependent_name VARCHAR(15),   
+                Sex CHAR,   
+                Bdate VARCHAR(10),   
+                Relationship VARCHAR(20),   
+                PRIMARY KEY(Dependent_name),   
+                FOREIGN KEY (Essn) REFERENCES EMPLOYEE(Ssn));
+
+ALTER TABLE PROJECTS    
+ADD PRIMARY KEY(Pnumber);
+
+ALTER TABLE EMPLOYEE   
+ADD FOREIGN KEY (Dno) REFERENCES DEPARTMENT(Dnumber);
+
+ALTER TABLE WORKS_ON   
+ADD FOREIGN KEY (Pno) REFERENCES PROJECTS (Pnumber);
+
+INSERT INTO EMPLOYEE VALUES('John','B','Smith',123456789,'1965-01-09','731 Fondren, Houston, TX','M','30000',null,NULL);
+
+INSERT INTO EMPLOYEE VALUES('Franklin','T','Wong',333445555,'1955-12-08','638 Voss, Houston, TX','M','40000',NULL,NULL);
+
+INSERT INTO EMPLOYEE VALUES('Alicia','J','Zelaya',999887777,'1968-01-19','3321 Castle, Spring, TX','F',25000,NULL,NULL);
+
+INSERT INTO EMPLOYEE VALUES('Jennifer','S','Wallace',987654321,'1941-06-20','291 Berry, Bellaire, TX','F',43000,NULL,NULL);
+
+INSERT INTO EMPLOYEE VALUES('Ramesh','K','Narayan',666884444,'1962-09-15','975 Fire Oak, Humble, TX','M',38000,NULL,NULL);
+
+INSERT INTO EMPLOYEE VALUES('Joyce','A','English',453453453,'1972-07-31','5631 Rice, Houston, TX','F',25000,NULL,NULL);
+
+INSERT INTO EMPLOYEE VALUES('Ahmad','V','Jabbar',987987987,'1969-03-29','980 Dallas, Houston, TX','M',25000,NULL,NULL);
+
+INSERT INTO EMPLOYEE VALUES('James','E','Borg',888665555,'1937-11-10','450 Stone, Houston, TX','M',55000,NULL,NULL);
+
+SELECT * FROM EMPLOYEE;
+
+UPDATE EMPLOYEE    
+SET Super_ssn=333445555    
+WHERE Ssn=123456789;
+
+UPDATE EMPLOYEE    
+SET Super_ssn=888665555    
+WHERE Ssn=333445555;
+
+UPDATE EMPLOYEE    
+SET Super_ssn=987654321    
+WHERE Ssn=999887777;
+
+UPDATE EMPLOYEE    
+SET Super_ssn=888665555    
+WHERE Ssn=987654321;
+
+UPDATE EMPLOYEE    
+SET Super_ssn=333445555    
+WHERE Ssn=666884444;
+
+UPDATE EMPLOYEE    
+SET Super_ssn=333445555    
+WHERE  Ssn=453453453;
+
+UPDATE EMPLOYEE    
+SET Super_ssn=987654321    
+WHERE Ssn=987987987;
+
+UPDATE EMPLOYEE    
+SET Super_ssn=NULL    
+WHERE Ssn=888665555;
+
+INSERT INTO DEPARTMENT VALUES('Research',5,333445555,'1988-05-22');
+
+INSERT INTO DEPARTMENT VALUES('Administration',4,987654321,'1995-01-01');
+
+INSERT INTO DEPARTMENT VALUES('Headquarters',1,888665555,'1981-06-19');
+
+SELECT * FROM DEPARTMENT;
+
+UPDATE EMPLOYEE    
+SET Dno=5    
+WHERE Ssn=123456789;
+
+UPDATE EMPLOYEE    
+SET Dno=5    
+WHERE Ssn=333445555;
+
+UPDATE EMPLOYEE    
+SET Dno=4    
+WHERE Ssn=999887777;
+
+UPDATE EMPLOYEE    
+SET Dno=4    
+WHERE Ssn=987654321;
+
+UPDATE EMPLOYEE    
+SET Dno=5    
+WHERE Ssn=666884444;
+
+UPDATE EMPLOYEE    
+SET Dno=5    
+WHERE  Ssn=453453453;
+
+UPDATE EMPLOYEE    
+SET Dno=4    
+WHERE Ssn=987987987;
+
+UPDATE EMPLOYEE    
+SET Dno=1    
+WHERE Ssn=888665555;
+
+INSERT INTO DEPT_LOCATIONS VALUES(1,'Houston');
+
+INSERT INTO DEPT_LOCATIONS VALUES(4,'Stafford');
+
+INSERT INTO DEPT_LOCATIONS VALUES(5,'Bellaire');
+
+INSERT INTO DEPT_LOCATIONS VALUES(5,'Sugarland');
+
+INSERT INTO DEPT_LOCATIONS VALUES(5,'Houston');
+
+SELECT * FROM DEPT_LOCATIONS;
+
+INSERT INTO PROJECTS VALUES('ProductX',1,'Bellaire',5);
+
+INSERT INTO PROJECTS VALUES('ProductY',2,'Sugarland',5);
+
+INSERT INTO PROJECTS VALUES('ProductZ',3,'Houston',5);
+
+INSERT INTO PROJECTS VALUES('Computerization',10,'Stafford',4);
+
+INSERT INTO PROJECTS VALUES('Reorganization',20,'Houston',1);
+
+INSERT INTO PROJECTS VALUES('Newbenefits',30,'Stafford',4);
+
+SELECT * FROM PROJECTS;
+
+INSERT INTO WORKS_ON VALUES(123456789,1,32.5);
+
+INSERT INTO WORKS_ON VALUES(123456789,2,7.5);
+
+INSERT INTO WORKS_ON VALUES(666884444,3,40.0);
+
+INSERT INTO WORKS_ON VALUES(453453453,1,20.0);
+
+INSERT INTO WORKS_ON VALUES(453453453,2,20.0);
+
+INSERT INTO WORKS_ON VALUES(333445555,2,10.0);
+
+INSERT INTO WORKS_ON VALUES(333445555,3,10.0);
+
+INSERT INTO WORKS_ON VALUES(333445555,10,10.0);
+
+INSERT INTO WORKS_ON VALUES(333445555,20,10.0);
+
+INSERT INTO WORKS_ON VALUES(999887777,30,30.0);
+
+INSERT INTO WORKS_ON VALUES(999887777,10,10.0);
+
+INSERT INTO WORKS_ON VALUES(987987987,10,35.0);
+
+INSERT INTO WORKS_ON VALUES(987987987,30,5.0);
+
+INSERT INTO WORKS_ON VALUES(987654321,30,20.0);
+
+INSERT INTO WORKS_ON VALUES(987654321,20,15.0);
+
+INSERT INTO WORKS_ON VALUES(888665555,20,NULL);
+
+SELECT * FROM WORKS_ON;
+
+INSERT INTO DEPENDENT VALUES(333445555,'Alice','F','1986-04-05','Daughter');
+
+INSERT INTO DEPENDENT VALUES(333445555,'Theodore','M','1983-10-25','Son');
+
+INSERT INTO DEPENDENT VALUES(333445555,'Joy','F','1958-05-03','Spouse');
+
+INSERT INTO DEPENDENT VALUES(987654321,'Abner','M','1942-02-28','Spouse');
+
+INSERT INTO DEPENDENT VALUES(123456789,'Michael','M','1988-01-04','Son');
+
+INSERT INTO DEPENDENT VALUES(123456789,'Elizabeth','F','1987-04-05','Spouse');
+
+INSERT INTO DEPENDENT VALUES(123456789,'Alice','F','1988-12-30','Daughter');
+
+SELECT  FNAME,MNAME,LNAME    
+FROM EMPLOYEE     
+WHERE NOT EXISTS (  333445555,123456789,987654321);
+
+SELECT  FNAME,MNAME,LNAME    
+FROM EMPLOYEE     
+WHERE NOT EXISTS (  
+                    SELECT *    
+                    FROM DEPENDENT    
+                    WHERE EMPLOYEE.Ssn=DEPENDENT.Essn);
+
+SELECT FNAME,MNAME,LNAME 
+FROM EMPLOYEE 
+WHERE NOT EXISTS ( 
+                    SELECT * 
+                    FROM DEPENDENT  
+                    WHERE EMPLOYEE.Ssn=DEPENDENT.Essn AND EMPLOYEE.FNAME=DEPENDENT_NAME AND EMPLOYEE.Sex=DEPENDENT.Sex);
+
+SELECT FNAME,MNAME,LNAME 
+FROM EMPLOYEE 
+WHERE  EXISTS ( 
+                    SELECT * 
+                    FROM DEPENDENT  
+                    WHERE EMPLOYEE.Ssn=DEPENDENT.Essn AND EMPLOYEE.FNAME=DEPENDENT_NAME AND EMPLOYEE.Sex=DEPENDENT.Sex);
+
+SELECT FNAME 
+FROM EMPLOYEE 
+WHERE EMPLOYEE.Ssn IN ( 
+                        SELECT Mgr_ssn 
+                        FROM DEPARTMENT 
+                        WHERE exists ( 
+                                        SELECT *  
+                                        FROM DEPENDENT 
+                                        WHERE DEPARTMENT.Essn = DEPENDENT.Essn);
+
+SELECT FNAME 
+FROM EMPLOYEE 
+WHERE EMPLOYEE.Ssn IN ( 
+                        SELECT Mgr_ssn 
+                        FROM DEPARTMENT 
+                        WHERE exists ( 
+                                        SELECT *  
+                                        FROM DEPENDENT 
+                                        WHERE DEPARTMENT.Essn = DEPENDENT.Essn));
+
+SELECT FNAME 
+FROM EMPLOYEE 
+WHERE EMPLOYEE.Ssn IN ( 
+                        SELECT Mgr_ssn 
+                        FROM DEPARTMENT 
+                        WHERE exists ( 
+                                        SELECT *  
+                                        FROM DEPENDENT 
+                                        WHERE DEPARTMENT.MGR_ssn = DEPENDENT.Essn));
+
+SELECT * 
+                FROM  PROJECTS 
+                WHERE PROJECTS.Pnumber<4;
+
+SELECT DISTINCT Ssn 
+FROM WORKS_ON 
+WHERE Pno IN ( SELECT Pnumber 
+                FROM  PROJECTS 
+                WHERE PROJECTS.Pnumber<4);
+
+SELECT DISTINCT Essn 
+FROM WORKS_ON 
+WHERE Pno IN ( SELECT Pnumber 
+                FROM  PROJECTS 
+                WHERE PROJECTS.Pnumber<4);
+
+SELECT FNAME,MNAME,LNAME 
+FROM EMPLOYEE 
+WHERE SALARY>ALL( 
+            SELECT SALARY 
+            FROM EMPLOYEE 
+            WHERE EMPLOYEE.Dno=5);
+
